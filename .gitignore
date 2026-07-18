@@ -4,4 +4,4 @@ dist/
 .DS_Store
 
 .fonts/
-*.png
+/orogami-*.png
