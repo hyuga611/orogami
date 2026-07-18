@@ -1,0 +1,47 @@
+{
+  "name": "orogami",
+  "version": "0.0.0",
+  "description": "日本語(CJK)のタイトルを自然な位置で折り返す。@vercel/og や Satori に1行で寄生する wrap ユーティリティ＋フォント自動サブセットOGP生成。",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./og": "./src/og.ts"
+  },
+  "scripts": {
+    "demo": "node examples/demo.ts",
+    "render": "node examples/render.ts"
+  },
+  "keywords": [
+    "ogp",
+    "budoux",
+    "cjk",
+    "japanese",
+    "line-break",
+    "word-break",
+    "satori",
+    "vercel-og",
+    "font-subset",
+    "禁則",
+    "分かち書き"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "budoux": "^0.7.0"
+  },
+  "peerDependencies": {
+    "satori": "*",
+    "@resvg/resvg-js": "*",
+    "subset-font": "*"
+  },
+  "peerDependenciesMeta": {
+    "satori": { "optional": true },
+    "@resvg/resvg-js": { "optional": true },
+    "subset-font": { "optional": true }
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "satori": "^0.12.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "subset-font": "^2.3.0"
+  }
+}
