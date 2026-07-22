@@ -1,13 +1,33 @@
 {
   "name": "orogami",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "日本語(CJK)のタイトルを自然な位置で折り返す。@vercel/og や Satori に1行で寄生する wrap ユーティリティ＋フォント自動サブセットOGP生成。",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./og": "./src/og.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./og": {
+      "types": "./dist/og.d.ts",
+      "import": "./dist/og.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
   },
   "scripts": {
+    "build": "tsup",
+    "prepublishOnly": "npm run build",
     "demo": "node examples/demo.ts",
     "render": "node examples/render.ts"
   },
@@ -25,23 +45,40 @@
     "分かち書き"
   ],
   "license": "MIT",
+  "author": "hyuga611",
+  "homepage": "https://github.com/hyuga611/orogami#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyuga611/orogami.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hyuga611/orogami/issues"
+  },
   "dependencies": {
     "budoux": "^0.7.0"
   },
   "peerDependencies": {
-    "satori": "*",
     "@resvg/resvg-js": "*",
+    "satori": "*",
     "subset-font": "*"
   },
   "peerDependenciesMeta": {
-    "satori": { "optional": true },
-    "@resvg/resvg-js": { "optional": true },
-    "subset-font": { "optional": true }
+    "satori": {
+      "optional": true
+    },
+    "@resvg/resvg-js": {
+      "optional": true
+    },
+    "subset-font": {
+      "optional": true
+    }
   },
   "devDependencies": {
-    "typescript": "^5.6.0",
-    "satori": "^0.12.0",
     "@resvg/resvg-js": "^2.6.2",
-    "subset-font": "^2.3.0"
+    "@types/node": "^26.1.1",
+    "satori": "^0.12.0",
+    "subset-font": "^2.3.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.6.0"
   }
 }
