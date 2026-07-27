@@ -4,6 +4,8 @@
 [![license](https://img.shields.io/npm/l/orogami.svg)](./LICENSE)
 [![zero-dep core](https://img.shields.io/badge/core%20deps-budoux%20only-blue.svg)](https://github.com/google/budoux)
 
+> By the author of **[reflint](https://github.com/hyuga611/reflint)** and a set of zero-dependency CI linters for AI-agent repos — see [Related tools](#related-tools).
+
 **日本語(CJK)のタイトルを、いちばん自然な位置で折り返す。** BudouX の分かち書き＋禁則を、既存の OGP 生成（`@vercel/og` / Satori）に **1行で寄生**させるためのユーティリティ。
 
 > Wrap Japanese / CJK titles at natural phrase boundaries — a drop-in for `@vercel/og` and Satori. No new framework to adopt.
@@ -86,5 +88,20 @@ npm run build   # tsup -> dist (esm + .d.ts)
 npm run demo    # 折り返し位置を | で可視化
 npm run render  # .fonts/NotoSansJP.ttf から OGP を生成
 ```
+
+## Related tools
+
+Zero-dependency CI linters for repos where AI agents do the work. Each one fails the PR on something that breaks quietly.
+
+| | Catches |
+| --- | --- |
+| [reflint](https://github.com/hyuga611/reflint) | `AGENTS.md` / `llms.txt` / `CLAUDE.md` pointing at commands, scripts, or paths that no longer exist |
+| [skills-lint](https://github.com/hyuga611/skills-lint) | `SKILL.md` broken references + `name`/trigger collisions between skills |
+| [carrylint](https://github.com/hyuga611/carrylint) | Skills with the author's machine or model baked in — absolute paths, undeclared CLIs, unresolved placeholders |
+| [genchi](https://github.com/hyuga611/genchi) | Agents reporting "done" without re-fetching real-world state |
+| [tracklint](https://github.com/hyuga611/tracklint) | Forms and CTAs that quietly stopped being wired for conversion tracking |
+| [tokenlint](https://github.com/hyuga611/tokenlint) | Hardcoded colors that bypass your design tokens |
+| [reflint for VS Code](https://github.com/hyuga611/reflint-vscode) | The same reflint checks, inline in the editor as you save |
+| **orogami** ← you are here | Not a linter — natural Japanese/CJK line breaking for OGP images (BudouX + font subsetting) |
 
 MIT © [hyuga611](https://github.com/hyuga611)
