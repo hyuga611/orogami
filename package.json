@@ -55,7 +55,7 @@
     "url": "https://github.com/hyuga611/orogami/issues"
   },
   "dependencies": {
-    "budoux": "^0.8.4"
+    "budoux": "^0.7.0"
   },
   "peerDependencies": {
     "@resvg/resvg-js": "*",
@@ -80,5 +80,8 @@
     "subset-font": "^2.3.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1"
   }
 }
