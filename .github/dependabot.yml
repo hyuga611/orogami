@@ -4,3 +4,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # TypeScript 7 は tsup 8.5.1 同梱の rollup-plugin-dts が未対応で、
+      # 型定義(dist/*.d.ts)の生成が useCaseSensitiveFileNames で落ちる。
+      # JS のビルド自体は成功してしまうので気づきにくい。
+      # tsup 側が対応したらこの ignore を外す。
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
