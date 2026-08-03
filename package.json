@@ -27,6 +27,8 @@
   },
   "scripts": {
     "build": "tsup",
+    "pretest": "npm run build",
+    "test": "node --test",
     "prepublishOnly": "npm run build",
     "demo": "node examples/demo.ts",
     "render": "node examples/render.ts"
