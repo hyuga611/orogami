@@ -1,0 +1,20 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  build:
+    # orogami has no unit tests yet, so CI verifies what is verifiable today:
+    # the committed lockfile installs, the sources typecheck, and tsup builds.
+    # npm ci (not install) is the point — it fails on a lockfile the bot broke.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install
+        run: npm ci
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Build
+        run: npm run build
