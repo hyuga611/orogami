@@ -1,6 +1,6 @@
 {
   "name": "orogami",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "日本語(CJK)のタイトルを自然な位置で折り返す。@vercel/og や Satori に1行で寄生する wrap ユーティリティ＋フォント自動サブセットOGP生成。",
   "type": "module",
   "exports": {
