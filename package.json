@@ -29,6 +29,7 @@
     "build": "tsup",
     "pretest": "npm run build",
     "test": "node --test",
+    "lint": "npx --yes @biomejs/biome@2.5.8 lint src test",
     "prepublishOnly": "npm run build",
     "demo": "node examples/demo.ts",
     "render": "node examples/render.ts"

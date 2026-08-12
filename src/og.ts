@@ -22,7 +22,7 @@ export async function subset(font: Buffer, text: string, opts: { weight?: number
 export async function renderOgp(title: string, opts: OgOptions): Promise<Buffer> {
   const { font, lang = 'ja', width = 1200, height = 630, fontFamily = 'Noto Sans JP', wrap: doWrap = true } = opts;
 
-  const content: any = doWrap
+  const content: Parameters<typeof satori>[0] = doWrap
     ? {
         type: 'div',
         props: {
