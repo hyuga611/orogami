@@ -17,6 +17,14 @@ updates:
       # （uuid / gaxios / node-fetch など）は、公開する tarball には一切入らない。
       # ここに出る脆弱性警告は利用者に届かないので、直接は上げられない
       # 推移的依存として無視する。budoux 自体の更新は対象のまま。
+      # budoux の minor 以上はモデルが変わりうる。0.9.0 では実際に分割位置が
+      # 変わり（"いい/天気ですね" → "いい天気ですね"）、バンドルしている以上
+      # それはそのまま利用者の折り返し位置の変更になる。devDependency の
+      # 更新に見えて挙動変更なので、人が判断してから上げる。patch は許可。
+      - dependency-name: "budoux"
+        update-types:
+          ["version-update:semver-minor", "version-update:semver-major"]
+
       - dependency-name: "google-artifactregistry-auth"
       - dependency-name: "google-auth-library"
       - dependency-name: "gaxios"

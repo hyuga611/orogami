@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/orogami.svg)](https://www.npmjs.com/package/orogami)
 [![license](https://img.shields.io/npm/l/orogami.svg)](./LICENSE)
-[![zero-dep core](https://img.shields.io/badge/core%20deps-budoux%20only-blue.svg)](https://github.com/google/budoux)
+[![zero dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](package.json)
 
 > By the author of **[reflint](https://github.com/hyuga611/reflint)** and a set of zero-dependency CI linters for AI-agent repos — see [Related tools](#related-tools).
 
