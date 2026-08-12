@@ -11,3 +11,13 @@ updates:
       # tsup 側が対応したらこの ignore を外す。
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+
+      # budoux は devDependency で、ビルド時に dist へバンドルしている。
+      # そのため budoux が引き連れてくる google-artifactregistry-auth 以下
+      # （uuid / gaxios / node-fetch など）は、公開する tarball には一切入らない。
+      # ここに出る脆弱性警告は利用者に届かないので、直接は上げられない
+      # 推移的依存として無視する。budoux 自体の更新は対象のまま。
+      - dependency-name: "google-artifactregistry-auth"
+      - dependency-name: "google-auth-library"
+      - dependency-name: "gaxios"
+      - dependency-name: "uuid"
