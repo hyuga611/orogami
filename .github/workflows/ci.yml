@@ -5,12 +5,30 @@ jobs:
   build:
     # npm ci (not install) is deliberate — it fails on a lockfile a bot broke.
     # npm test runs pretest -> build, so the suite always runs against fresh dist.
-    runs-on: ubuntu-latest
+    #
+    # The matrix is not decoration. This package declares engines >=18 and, until
+    # budoux 0.8.4, that promise was false: budoux 0.7.0 shipped an ESM file that
+    # its own package.json declared as CommonJS, so importing it only worked on the
+    # Node versions that detect module syntax by default (>=20.19, >=22.7). A single
+    # Node 20 job was green throughout, because 20.x happened to be on the working
+    # side of that line. Note the failure was NOT monotonic — 20.19 worked while
+    # 22.6 did not — so testing only the declared floor would not have caught it.
+    # Every supported major runs, and the floor runs first.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node: ['18.x', '20.x', '22.x', '24.x']
+        include:
+          # The suite is written on Windows; CI never proved it there until now.
+          - os: windows-latest
+            node: '22.x'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node }}
       - name: Install
         run: npm ci
       - name: Typecheck
