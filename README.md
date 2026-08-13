@@ -6,7 +6,7 @@
 
 > By the author of **[reflint](https://github.com/hyuga611/reflint)** and a set of zero-dependency CI linters for AI-agent repos — see [Related tools](#related-tools).
 
-**日本語(CJK)のタイトルを、いちばん自然な位置で折り返す。** BudouX の分かち書き＋禁則を、既存の OGP 生成（`@vercel/og` / Satori）に **1行で寄生**させるためのユーティリティ。
+**日本語(CJK)のタイトルを、いちばん自然な位置で折り返す。** BudouX の分かち書きを、既存の OGP 生成（`@vercel/og` / Satori）や普通の HTML に**あとから足す**ためのユーティリティ。新しいフレームワークもテーマ書式も要らない。
 
 > Wrap Japanese / CJK titles at natural phrase boundaries — a drop-in for `@vercel/og` and Satori. No new framework to adopt.
 
@@ -18,20 +18,21 @@ npm i orogami
 
 ## なぜ
 
-`@vercel/og` も `astro-og-canvas` も日本語を **文字単位** で折り返すので、タイトルが不自然に割れる（例: 行末で `東|京` と割れる）。orogami はタイトル文字列を **渡す前に1行ラップするだけ**。新しいツールも独自テーマ書式も要らない ＝ 採用摩擦ゼロ。
+`@vercel/og` も `astro-og-canvas` も日本語を **文字単位** で折り返すので、タイトルが不自然に割れる（例: 行末で `東|京` と割れる）。orogami は BudouX の分かち書きを使って、**折り返してよい位置だけ**を渡す。新しいツールも独自テーマ書式も要らない。
 
-## 使い方（寄生モード）
+ただし**渡し方がブラウザと Satori で違う**。同じ書き方は通用しないので、下の2節は別々に読んでほしい。
 
-```ts
-import { wrap } from 'orogami';
+## 使い方 1: ブラウザ（HTML/CSS）
 
-// 既存の @vercel/og の JSX に、タイトルを wrap() で包むだけ
-<div style={{ wordBreak: 'keep-all' }}>
-  {wrap('個人開発したツールが海外でもバズる方法')}
+```html
+<div style="word-break: keep-all">
+  <!-- wrap() の戻り値をそのまま入れる -->
 </div>
 ```
 
-`wrap()` は分かち書きの境界にゼロ幅スペース（ZWSP）を差し込む。CSS の `word-break: keep-all` と併用すると **その位置でしか折り返さない**。折り返し位置を確認したいだけなら `preview()`（境界を `|` で可視化）や `phrases()`（配列で取得）を使う。
+`wrap()` は分かち書きの境界にゼロ幅スペース（ZWSP）を差し込む。CSS の `word-break: keep-all` と併用すると **その位置でしか折り返さない**。ブラウザで実測して確認済み。
+
+折り返し位置を確認したいだけなら `preview()`（境界を `|` で可視化）や `phrases()`（配列で取得）を使う。
 
 ```ts
 import { preview } from 'orogami';
@@ -41,6 +42,38 @@ preview('東京都渋谷区のスタートアップで働くエンジニアの�
 ```
 
 `lang` は `'ja'`（既定） / `'zh-Hans'` / `'zh-Hant'` に対応。
+
+## 使い方 2: Satori / `@vercel/og`（**上と書き方が違う**）
+
+Satori はブラウザではないので、**`word-break: keep-all` + ZWSP はここでは効かない。** Satori は `keep-all` を指定されると `Intl.Segmenter` の word 境界で切り、ZWSP を折り返し位置の指定としては見ない。
+
+タイトル5本 × 幅5種＝25通りを Satori 0.29 で実測した結果：
+
+| 書き方 | 文節境界で折れた | 文節の途中で割れた |
+| --- | --- | --- |
+| `wrap()` + `wordBreak: 'keep-all'` | 7 | **18** |
+| `wrap()` だけ | 0 | 25 |
+| orogami を使わない | 2 | 23 |
+| **文節を1つずつ flex アイテムにする** | **23** | 2 |
+
+`個人開発したツール / が海外の開発者に` のように、**このパッケージが防ぐために存在する割れ方をする。** 0.1.2 以前の README はこの表の1行目を「その位置でしか折り返さない」として勧めていた。誤りだったので直した。
+
+Satori では、折り返しを**レイアウトの問題として渡す**：
+
+```tsx
+import { phrases } from 'orogami';
+
+<div style={{ display: 'flex', flexWrap: 'wrap' }}>
+  {phrases(title).map((p, i) => <span key={i}>{p}</span>)}
+</div>
+```
+
+flex アイテムの間でしか改行されないので、**文節の途中では割れない。** `renderOgp()` は最初からこれを使っている（表の4行目がその実測値）。
+
+残る 2/25 は、1つの文節が1行に収まらない場合。そのときはどこかで割るしかなく、どんな指定でも避けられない。
+
+この表は `npm run breaks`（[`examples/satori-breaks.ts`](examples/satori-breaks.ts)）で再現できる。信じる必要はない。
+
 
 ## OGP画像の生成 ＋ フォント自動サブセット（experimental · `orogami/og`）
 
@@ -87,6 +120,7 @@ npm install
 npm run build   # tsup -> dist (esm + .d.ts)
 npm run demo    # 折り返し位置を | で可視化
 npm run render  # .fonts/NotoSansJP.ttf から OGP を生成
+npm run breaks  # 上の Satori 実測表を再現する
 ```
 
 ## Related tools
