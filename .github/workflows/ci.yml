@@ -31,10 +31,21 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: Install
         run: npm ci
-      - name: Typecheck
-        run: npx tsc --noEmit
+      # Build before typecheck, not after. `examples/satori-breaks.ts` imports
+      # `../dist/index.js` on purpose — it is the recipe a reader copies, so it
+      # has to go through the published entry point rather than through `src/`.
+      # On a clean checkout that module does not exist yet, so `tsc --noEmit`
+      # reported four errors that said nothing about the code:
+      #
+      #   examples/satori-breaks.ts(20,31): TS2307: Cannot find module '../dist/index.js'
+      #   examples/satori-breaks.ts(64,26): TS7006: Parameter 'p' implicitly has an 'any' type
+      #
+      # The TS7006 pair was downstream of the TS2307 pair: with the module
+      # unresolved, the callback parameter had no type to infer from.
       - name: Build
         run: npm run build
+      - name: Typecheck
+        run: npx tsc --noEmit
       - name: Test
         run: npm test
 
